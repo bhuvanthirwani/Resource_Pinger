@@ -62,6 +62,10 @@ export function fetchPingHistory({ resourceId, limit = 100, offset = 0 } = {}) {
   return request(`/ping-history?${params.toString()}`);
 }
 
+export function fetchPingStats() {
+  return request('/ping-history/stats');
+}
+
 // ---- Manual Ping ----
 export function pingResource(id) {
   return request(`/resources/${id}/ping`, { method: 'POST' });

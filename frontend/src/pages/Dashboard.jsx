@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchResources, fetchPingHistory, fetchNextPing, pingAllResources } from '../api';
+import { fetchResources, fetchPingHistory, fetchNextPing, pingAllResources, fetchPingStats } from '../api';
 import { useToast } from '../components/Toast';
 
 export default function Dashboard() {
@@ -22,25 +22,21 @@ export default function Dashboard() {
   async function loadDashboard() {
     setLoading(true);
     try {
-      const [resources, history, nextPingData] = await Promise.all([
+      const [resources, history, nextPingData, statsData] = await Promise.all([
         fetchResources(),
-        fetchPingHistory({ limit: 50 }),
+        fetchPingHistory({ limit: 10 }),
         fetchNextPing(),
+        fetchPingStats(),
       ]);
-
-      const successCount = history.filter((h) => h.status === 'success').length;
-      const failedCount = history.filter((h) => h.status === 'failed').length;
-      const totalMs = history.reduce((sum, h) => sum + (h.response_time_ms || 0), 0);
-      const avgMs = history.length > 0 ? Math.round(totalMs / history.length) : 0;
 
       setStats({
         total: resources.length,
-        success: successCount,
-        failed: failedCount,
-        avgResponse: avgMs,
+        success: statsData.success,
+        failed: statsData.failed,
+        avgResponse: statsData.avgResponse,
       });
 
-      setRecentPings(history.slice(0, 10));
+      setRecentPings(history);
       setNextPing(nextPingData?.next_ping_at || null);
     } catch (err) {
       console.error('Dashboard load failed:', err);

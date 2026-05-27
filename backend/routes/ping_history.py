@@ -49,3 +49,31 @@ def list_ping_history():
         results.append(d)
 
     return jsonify(results), 200
+
+
+@ping_history_bp.route("/ping-history/stats", methods=["GET"])
+def get_ping_stats():
+    """Return aggregated ping statistics for the dashboard."""
+    sql = """
+        SELECT 
+            COUNT(*) AS total_count,
+            COUNT(CASE WHEN status = 'success' THEN 1 END) AS success_count,
+            COUNT(CASE WHEN status = 'failed' THEN 1 END) AS failed_count,
+            ROUND(AVG(response_time_ms)) AS avg_response_time
+        FROM ping_history
+    """
+    rows = query(sql)
+    if rows:
+        row = rows[0]
+        return jsonify({
+            "total": row["total_count"] or 0,
+            "success": row["success_count"] or 0,
+            "failed": row["failed_count"] or 0,
+            "avgResponse": int(row["avg_response_time"] or 0)
+        }), 200
+    return jsonify({
+        "total": 0,
+        "success": 0,
+        "failed": 0,
+        "avgResponse": 0
+    }), 200
