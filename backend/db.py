@@ -7,11 +7,23 @@ import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-_CONFIG_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "configs",
-    "production.json",
-)
+_PATHS_TO_TRY = [
+    # Local development / sibling of backend
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "configs", "production.json"),
+    # Inside Docker / subdirectory of working dir
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", "production.json"),
+    # Working directory fallback
+    os.path.join(os.getcwd(), "configs", "production.json"),
+]
+
+_CONFIG_PATH = None
+for p in _PATHS_TO_TRY:
+    if os.path.exists(p):
+        _CONFIG_PATH = p
+        break
+
+if not _CONFIG_PATH:
+    _CONFIG_PATH = _PATHS_TO_TRY[0]
 
 
 def _load_database_url() -> str:
