@@ -5,6 +5,7 @@
 # ---- Sensitive Configuration ----
 configs/*
 !configs/production.example.json
+backend/configs/
 
 # ---- Python ----
 __pycache__/

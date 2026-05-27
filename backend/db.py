@@ -27,6 +27,7 @@ if not _CONFIG_PATH:
 
 
 def _load_database_url() -> str:
+    
     with open(_CONFIG_PATH, "r") as f:
         cfg = json.load(f)
     return cfg["DATABASE_URL"]

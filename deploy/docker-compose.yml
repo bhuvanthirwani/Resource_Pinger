@@ -1,17 +1,15 @@
 services:
   backend:
-    build: ../backend
+    image: devhaxcodes/pinger-backend:latest
     container_name: resource-pinger-backend
     ports:
       - "5000:5000"
-    volumes:
-      - ../configs:/app/configs
     environment:
       - FLASK_ENV=production
     restart: unless-stopped
 
   frontend:
-    build: ../frontend
+    image: devhaxcodes/pinger-frontend:latest
     container_name: resource-pinger-frontend
     ports:
       - "3000:80"
