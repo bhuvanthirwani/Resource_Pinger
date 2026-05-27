@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ../backend
+    container_name: resource-pinger-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../configs:/app/configs
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+
+  frontend:
+    build: ../frontend
+    container_name: resource-pinger-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

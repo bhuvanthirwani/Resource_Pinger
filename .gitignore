@@ -1,0 +1,42 @@
+# ============================================================
+# Resource Pinger — .gitignore
+# ============================================================
+
+# ---- Sensitive Configuration ----
+configs/*
+!configs/production.example.json
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# ---- Node / Frontend ----
+frontend/node_modules/
+frontend/dist/
+
+# ---- IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Scratch / Temp ----
+scratch_*.py
+initialize_db.py
+backend/pinger.json
+
+deploy/docker_manager.sh
+deploy/nginx.sh
